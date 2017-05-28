@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 
 public class PhotoIntentActivity extends Activity {
@@ -234,12 +233,7 @@ public class PhotoIntentActivity extends Activity {
 		mImageBitmap = savedInstanceState.getParcelable(BITMAP_STORAGE_KEY);
 
 		mImageView.setImageBitmap(mImageBitmap);
-		mImageView.setVisibility(
-				savedInstanceState.getBoolean(IMAGEVIEW_VISIBILITY_STORAGE_KEY) ? 
-						ImageView.VISIBLE : ImageView.INVISIBLE
-		);
-
-
+		mImageView.setVisibility(savedInstanceState.getBoolean(IMAGEVIEW_VISIBILITY_STORAGE_KEY) ? ImageView.VISIBLE : ImageView.INVISIBLE);
 	}
 
     private void cropImage(){
@@ -251,7 +245,6 @@ public class PhotoIntentActivity extends Activity {
         this.setResult(RESULT_OK, cropIntent);
         startActivityForResult(cropIntent, CROP_PICTURE);
     }
-
 
 	public static boolean isIntentAvailable(Context context, String action) {
 		final PackageManager packageManager = context.getPackageManager();
@@ -270,8 +263,7 @@ public class PhotoIntentActivity extends Activity {
 		if (isIntentAvailable(this, intentName)) {
 			btn.setOnClickListener(onClickListener);        	
 		} else {
-			btn.setText( 
-				getText(R.string.cannot).toString() + " " + btn.getText());
+			btn.setText(getText(R.string.cannot).toString() + " " + btn.getText());
 			btn.setClickable(false);
 		}
 	}
