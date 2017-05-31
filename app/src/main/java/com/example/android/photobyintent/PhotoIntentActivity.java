@@ -28,7 +28,7 @@ import android.widget.Toast;
 public class PhotoIntentActivity extends Activity {
 
 	private static final int ACTION_TAKE_PHOTO_B = 1;
-	private static final int CROP_PICTURE = 2; //가져온 사진을 자르기 위한 변수
+	private static final int CROP_PICTURE = 2; // 사진 크롭 변수
 
 	private static final String BITMAP_STORAGE_KEY = "viewbitmap";
 	private static final String IMAGEVIEW_VISIBILITY_STORAGE_KEY = "imageviewvisibility";
@@ -43,7 +43,7 @@ public class PhotoIntentActivity extends Activity {
 
 	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
 
-	/* Photo album for this application */
+	/* 앨범 이름 */
 	private String getAlbumName() {
 		return getString(R.string.album_name);
 	}
@@ -91,35 +91,32 @@ public class PhotoIntentActivity extends Activity {
 
 	private void setPic() {
 
-		/* There isn't enough memory to open up more than a couple camera photos */
-		/* So pre-scale the target bitmap into which the file is decoded */
-
-		/* Get the size of the ImageView */
+		//Pre-scaling
+		//imageView사이즈 받음
 		int targetW = mImageView.getWidth();
 		int targetH = mImageView.getHeight();
 
-		/* Get the size of the image */
+		//이미지 사이즈
 		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
 		bmOptions.inJustDecodeBounds = true;
 		BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 		int photoW = bmOptions.outWidth;
 		int photoH = bmOptions.outHeight;
 		
-		/* Figure out which way needs to be reduced less */
+		//리사이징할 부분 선택
 		int scaleFactor = 1;
 		if ((targetW > 0) || (targetH > 0)) {
 			scaleFactor = Math.min(photoW/targetW, photoH/targetH);	
 		}
 
-		/* Set bitmap options to scale the image decode target */
 		bmOptions.inJustDecodeBounds = false;
 		bmOptions.inSampleSize = scaleFactor;
 		bmOptions.inPurgeable = true;
 
-		/* Decode the JPEG file into a Bitmap */
+		//jpg -> bitmap decode
 		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 		
-		/* Associate the Bitmap to the ImageView */
+		//bitmap -> imageView decode
 		mImageView.setImageBitmap(bitmap);
 		mImageView.setVisibility(View.VISIBLE);
 	}
@@ -177,7 +174,7 @@ public class PhotoIntentActivity extends Activity {
 	};
 
 
-	/** Called when the activity is first created. */
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -218,7 +215,7 @@ public class PhotoIntentActivity extends Activity {
 		}
 	}
 
-	// Some lifecycle callbacks so that the image can survive orientation change
+	// Some lifecycle callbacks -> so that the image can survive orientation change
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putParcelable(BITMAP_STORAGE_KEY, mImageBitmap);
