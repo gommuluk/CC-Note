@@ -23,7 +23,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 public class PhotoIntentActivity extends Activity {
 
@@ -32,7 +40,7 @@ public class PhotoIntentActivity extends Activity {
 
 	private static final String BITMAP_STORAGE_KEY = "viewbitmap";
 	private static final String IMAGEVIEW_VISIBILITY_STORAGE_KEY = "imageviewvisibility";
-	private ImageView mImageView;
+//	private ImageView mImageView;
 	private Bitmap mImageBitmap;
 
 	private String mCurrentPhotoPath;
@@ -42,6 +50,8 @@ public class PhotoIntentActivity extends Activity {
 	private static final String JPEG_FILE_SUFFIX = ".jpg";
 
 	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
+
+    static final String[] LIST_MENU = {"LIST1", "LIST2", "LIST3"} ;
 
 	/* 앨범 이름 */
 	private String getAlbumName() {
@@ -88,7 +98,7 @@ public class PhotoIntentActivity extends Activity {
 		
 		return f;
 	}
-
+/*
 	private void setPic() {
 
 		//Pre-scaling
@@ -120,7 +130,7 @@ public class PhotoIntentActivity extends Activity {
 		mImageView.setImageBitmap(bitmap);
 		mImageView.setVisibility(View.VISIBLE);
 	}
-
+*/
 	private void galleryAddPic() {
 		    Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
 			File f = new File(mCurrentPhotoPath);
@@ -158,7 +168,7 @@ public class PhotoIntentActivity extends Activity {
 	private void handleBigCameraPhoto() {
 
 		if (mCurrentPhotoPath != null) {
-			setPic();
+			//setPic();
 			galleryAddPic();
 			mCurrentPhotoPath = null;
 		}
@@ -178,9 +188,9 @@ public class PhotoIntentActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.activity_main);
 
-		mImageView = (ImageView) findViewById(R.id.imageView);
+		//mImageView = (ImageView) findViewById(R.id.imageView);
 
 		mImageBitmap = null;
 
@@ -198,7 +208,46 @@ public class PhotoIntentActivity extends Activity {
 		} else {
 			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
 		}
+
+        ListView listview ;
+        ListViewAdapter adapter;
+
+        // Adapter 생성
+        adapter = new ListViewAdapter() ;
+
+        // 리스트뷰,헤더 참조
+        listview = (ListView) findViewById(R.id.listview1);
+        final View header = getLayoutInflater().inflate(R.layout.listview_header, null, false) ;
+        //리스트뷰에 header달기
+        listview.addHeaderView(header) ;
+
+        //adapter 달기
+        listview.setAdapter(adapter);
+
+        // 첫 번째 아이템 추가.
+        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.ic_folder_box_blue),
+                "folder1", "folder1_info") ;
+        // 두 번째 아이템 추가.
+        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.ic_folder_box_yellow),
+                "folder2", "folder2_info") ;
+        // 세 번째 아이템 추가.
+        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.ic_folder_box_pink),
+                "folder3", "folder3_info") ;
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View v, int position, long id) {
+                // get item
+                ListViewItem item = (ListViewItem) parent.getItemAtPosition(position) ;
+
+                String titleStr = item.getTitle() ;
+                String descStr = item.getDesc() ;
+                Drawable iconDrawable = item.getIcon() ;
+
+                // TODO : use item data.
+            }
+        }) ;
 	}
+
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -229,8 +278,8 @@ public class PhotoIntentActivity extends Activity {
 		super.onRestoreInstanceState(savedInstanceState);
 		mImageBitmap = savedInstanceState.getParcelable(BITMAP_STORAGE_KEY);
 
-		mImageView.setImageBitmap(mImageBitmap);
-		mImageView.setVisibility(savedInstanceState.getBoolean(IMAGEVIEW_VISIBILITY_STORAGE_KEY) ? ImageView.VISIBLE : ImageView.INVISIBLE);
+//		mImageView.setImageBitmap(mImageBitmap);
+//		mImageView.setVisibility(savedInstanceState.getBoolean(IMAGEVIEW_VISIBILITY_STORAGE_KEY) ? ImageView.VISIBLE : ImageView.INVISIBLE);
 	}
 
     private void cropImage(){
