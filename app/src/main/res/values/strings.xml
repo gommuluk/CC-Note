@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CC-Note</string>
+    <string name="btnCamera">Camera</string>
+    <string name="cannot">Cannot</string>
+    <string name="album_name">CC-Note</string>
+</resources>
